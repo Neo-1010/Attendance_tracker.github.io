@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Attendance Register</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#eef1e8;--sf:#fbfcf7;--ink:#1d2a44;--mute:#5d6882;--line:#cdd3c2;--p:#2f7d55;--a:#b8392f;--l:#a8741c;--pb:#dcefe3;--ab:#f6dcd8;--lb:#f4e6cb;--c:#3b62b8;--cb:#dbe5f7;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#121722;--sf:#1a2130;--ink:#e6eaf4;--mute:#97a1ba;--line:#2e384d;--p:#5cc58c;--a:#ef7b70;--l:#e0ad5a;--pb:#173325;--ab:#3a1d1f;--lb:#3a2e15;--c:#8fb0f0;--cb:#1b2740}}
+:root[data-theme="dark"]{--bg:#121722;--sf:#1a2130;--ink:#e6eaf4;--mute:#97a1ba;--line:#2e384d;--p:#5cc58c;--a:#ef7b70;--l:#e0ad5a;--pb:#173325;--ab:#3a1d1f;--lb:#3a2e15;--c:#8fb0f0;--cb:#1b2740}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 15px/1.5 "Bricolage Grotesque",system-ui,sans-serif}
+main{max-width:920px;margin:0 auto;padding:20px 16px 48px}
+h1{font-size:28px;font-weight:800;margin:0;letter-spacing:-.02em}h2{font-size:17px;font-weight:600;margin:0 0 10px}
+.top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:18px;flex-wrap:wrap}
+.card{background:var(--sf);border:1px solid var(--line);border-radius:10px;padding:16px;margin-bottom:16px}
+.sub{color:var(--mute);font-size:13px}
+button,input,select{font:inherit;color:inherit}
+.btn{background:var(--ink);color:var(--bg);border:0;border-radius:6px;padding:8px 14px;cursor:pointer;font-weight:600}
+.btn.ghost{background:none;color:var(--ink);border:1px solid var(--line)}
+input,select{background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:8px 10px;min-width:0}
+:focus-visible{outline:2px solid var(--p);outline-offset:2px}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.tabs{display:flex;gap:4px;margin-bottom:16px;border-bottom:1px solid var(--line)}
+.tab{background:none;border:0;padding:10px 14px;cursor:pointer;color:var(--mute);border-bottom:3px solid transparent;font-weight:600}
+.tab[aria-selected=true]{color:var(--ink);border-color:var(--ink)}
+.scroll{overflow-x:auto}
+table{border-collapse:collapse;width:100%;min-width:560px}
+th,td{padding:8px 6px;text-align:center;border-bottom:1px solid var(--line)}
+th:first-child,td:first-child{text-align:left}
+th{font-weight:600;font-size:13px;color:var(--mute)}
+.m{width:38px;height:34px;border-radius:6px;border:1px solid var(--line);background:var(--bg);font-weight:800;cursor:pointer;color:var(--mute)}
+.m.P{background:var(--pb);color:var(--p);border-color:var(--p)}
+.m.A{background:var(--ab);color:var(--a);border-color:var(--a)}
+.m.C{background:var(--cb);color:var(--c);border-color:var(--c)}
+.m.L{background:var(--lb);color:var(--l);border-color:var(--l)}
+.m:disabled{cursor:not-allowed;opacity:.65}
+span.m{display:inline-flex;align-items:center;justify-content:center;width:34px;height:28px;cursor:default}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.chip{border:1px solid var(--line);background:none;border-radius:99px;padding:4px 12px;cursor:pointer}
+.chip[aria-pressed=true]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.log{list-style:none;margin:0;padding:0}
+.log li{padding:10px 0;border-bottom:1px solid var(--line);display:flex;gap:10px;align-items:baseline}
+.tag{font-size:12px;font-weight:600;border-radius:4px;padding:1px 7px;background:var(--lb);color:var(--l);white-space:nowrap}
+.sj{display:inline-block;max-width:84px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;vertical-align:bottom}
+.del,.sdel{color:var(--a);border-color:var(--a)}
+textarea{width:100%;min-height:90px;background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:8px;font:inherit;color:inherit}
+.tag.per{background:var(--pb);color:var(--p)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:10px}
+.stat{border:1px solid var(--line);border-radius:8px;padding:10px}
+.stat b{font-size:24px;font-weight:800;display:block}
+.bar{height:6px;background:var(--line);border-radius:3px;margin-top:6px}.bar i{display:block;height:100%;background:var(--p);border-radius:3px}
+.login{max-width:380px;margin:8vh auto 0}.login label{display:block;margin:12px 0 4px;font-weight:600}.login input,.login select{width:100%}
+.err{color:var(--a);min-height:20px;margin-top:8px}
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+</head>
+<body><main id="app"></main>
+<script>
+const N=6,PW="admin123",KEY="att_tracker_v2";
+const FN=["Aarav","Meera","Rahul","Sneha","Kiran","Anjali","Farhan","Diya","Arjun","Nisha","Joel"],LN=["Nair","Thomas","Menon","Pillai","Joseph","Das","Varma"];
+const demoStu=()=>Array.from({length:71},(_,i)=>({id:"R"+(101+i),name:FN[i%11]+" "+LN[Math.floor(i/11)]}));
+let STU=[];
+const fmt=d=>d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const NEXT={"":"P",P:"A",A:"L",L:"C",C:"P"};
+function seed(){const stu=demoStu();let s=7,r=()=>(s=(s*9301+49297)%233280)/233280,rec={},d=new Date(),n=0;
+ while(n<6){if(d.getDay()%6){const k=fmt(d);rec[k]={};stu.forEach(u=>rec[k][u.id]=Array.from({length:N},()=>{const x=r();return x<.82?"P":x<.94?"A":"L"}));n++}d.setDate(d.getDate()-1)}
+ return{rec,log:[],stu}}
+let db;try{db=JSON.parse(localStorage.getItem(KEY))}catch(e){}
+db=db||seed();STU=db.stu;
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(db))}catch(e){}};
+const get=(d,id)=>(db.rec[d]&&db.rec[d][id])||Array(N).fill("");
+function put(d,id,p,v){db.rec[d]=db.rec[d]||{};db.rec[d][id]=get(d,id).slice();db.rec[d][id][p]=v}
+db.subjects=db.subjects||(db.subj||["Mathematics","Physics","Chemistry","English","Computer Science","Elective"]).map(n=>({name:n,teachers:[]}));delete db.subj;db.tt=db.tt||{};db.pw=db.pw||PW;db.pws=db.pws||{tutor:db.pw,rep:"rep123"};
+if(!db.v3){for(let i=STU.length,k=101;STU.length<71;i++){let id;do{id="R"+k++}while(STU.some(u=>u.id===id));STU.push({id,name:"Student "+(i+1)})}db.v3=1;save()}
+const defTT=()=>db.subjects.slice(0,N).map(x=>({sub:x.name,t:x.teachers[0]||""}));
+const getTT=d=>db.tt[d]||defTT();
+const sh=d=>getTT(d).map((x,i)=>`<th><span class="sj" title="${esc(x.sub+(x.t?" ("+x.t+")":""))}">${i+1}. ${esc(x.sub)}</span></th>`).join("");
+const cp=a=>a.map(x=>({...x}));
+const ADM=()=>st.user&&st.user.role!=="student",TUT=()=>st.user&&st.user.role==="tutor",WHO=()=>TUT()?"Class tutor":"Class rep";
+function setTT(a,why){db.tt[st.date]=a;db.log.push({t:Date.now(),by:WHO(),scope:"tt",date:st.date,note:why});save();render()}
+let st={q:"",del:"",user:null,tab:"mark",date:fmt(new Date()),filter:"all",err:"",msg:""};
+const app=document.getElementById("app");
+const pct=a=>{const p=a.filter(x=>x==="P"||x==="L").length,t=p+a.filter(x=>x==="A").length;return t?Math.round(p/t*100):null};
+const when=t=>new Date(t).toLocaleString([], {day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"});
+const dlabel=d=>new Date(d+"T00:00").toLocaleDateString([], {weekday:"short",day:"numeric",month:"short"});
+
+function loginView(){return `<div class="card login"><h1>Attendance Register</h1><p class="sub">Sign in to continue.</p>
+<label for="role">I am a</label><select id="role"><option value="student">Student</option><option value="rep">Class rep</option><option value="tutor">Class tutor</option></select>
+<div id="f"></div><div class="err" id="err">${esc(st.err)}</div><button class="btn" id="go" style="width:100%">Sign in</button></div>`}
+function fields(){const a=document.getElementById("role").value!=="student";
+ document.getElementById("f").innerHTML=a?`<label for="pw">Password</label><input id="pw" type="password" autocomplete="off">`
+ :`<label for="sid">Roll number</label><select id="sid">${STU.map(u=>`<option value="${esc(u.id)}">${esc(u.id)} · ${esc(u.name)}</option>`).join("")}</select>`}
+
+function head(){const u=st.user,adm=u.role!=="student";return `<div class="top"><div><h1>${adm?(u.role==="tutor"?"Class tutor desk":"Class rep desk"):esc(u.name)}</h1><div class="sub">${u.role==="tutor"?"Oversee attendance, resolve claims and manage the class":u.role==="rep"?"Mark attendance and set each day's timetable":esc(u.id)+" · your attendance, read-only"}</div></div><button class="btn ghost" id="out">Sign out</button></div>`}
+
+function markView(){
+ const tt=getTT(st.date),k=tt.length,q=st.q.toLowerCase();
+ const rows=STU.filter(u=>!q||(u.name+u.id).toLowerCase().includes(q)).map(u=>{const a=get(st.date,u.id).slice(0,k),p=pct(a);return `<tr><td>${esc(u.name)}<div class="sub">${esc(u.id)}</div></td>${a.map((v,i)=>`<td><button class="m ${v}" data-id="${esc(u.id)}" data-p="${i}" aria-label="${esc(u.name)} ${esc(tt[i].sub)}: ${v||"unmarked"}"${v==="C"&&!TUT()?' disabled title="Only the class tutor can resolve claims"':""}>${v||"–"}</button></td>`).join("")}<td>${p===null?"–":p+"%"}</td></tr>`}).join("");
+ const tsel=tt.map((x,i)=>{const sb=db.subjects.find(z=>z.name===x.sub)||{teachers:[]},tl=[...new Set([...sb.teachers,x.t].filter(Boolean))];
+  return `<div><div class="sub">Period ${i+1}</div><select class="ts" data-i="${i}" aria-label="Subject, period ${i+1}">${db.subjects.map((z,j)=>`<option value="${j}"${z.name===x.sub?" selected":""}>${esc(z.name)}</option>`).join("")}</select> <select class="tch" data-i="${i}" aria-label="Teacher, period ${i+1}"><option value="">No teacher</option>${tl.map(t=>`<option value="${esc(t)}"${t===x.t?" selected":""}>${esc(t)}</option>`).join("")}</select></div>`}).join("");
+ return `<div class="card"><div class="row" style="justify-content:space-between;margin-bottom:6px"><h2 style="margin:0">Timetable for ${dlabel(st.date)}</h2><input type="date" id="dt" value="${st.date}" aria-label="Date"></div>
+ <p class="sub">Set the day's periods, subjects and teachers first. They can be different every day. Marks stay with the period slot, so avoid swapping subjects after marking.</p>
+ <div class="row" style="margin-bottom:10px"><label class="sub">Periods that day <select id="tn">${[...Array(N)].map((_,i)=>`<option${i+1===k?" selected":""}>${i+1}</option>`).join("")}</select></label><button class="btn ghost" id="tcopy">Copy earlier timetable</button><button class="btn ghost" id="tshuf">Shuffle order</button></div>
+ <div class="row" style="align-items:flex-start">${tsel}</div></div>
+ ${TUT()?`<div class="card"><h2>Whole college</h2><div class="row"><select id="cp"><option value="all">All periods</option>${tt.map((x,i)=>`<option value="${i}">${i+1}. ${esc(x.sub)}</option>`).join("")}</select>
+ <select id="cs"><option value="P">Present</option><option value="A">Absent</option><option value="L">Late</option><option value="C">Claim</option></select><input id="cn" placeholder="Reason (e.g. Holiday)" style="flex:1;min-width:140px"><button class="btn" id="cb">Apply to everyone</button></div>
+ <div class="sub" style="margin-top:6px">${esc(st.msg)}</div></div>`:`<p class="sub">${esc(st.msg)}</p>`}
+ <div class="card"><div class="row" style="justify-content:space-between;margin-bottom:10px"><h2 style="margin:0">Individual periods</h2><input id="sq" type="search" placeholder="Find student" value="${esc(st.q)}" aria-label="Find student"></div>
+ <div class="sub" style="margin-bottom:8px">Tap a cell to cycle Present → Absent → Late → Claim. Late counts as present; claims are left out of the percentage until resolved.${TUT()?" You resolve a claim by changing its status.":" Claims (C) are locked until the class tutor resolves them."}</div>
+ <div class="scroll"><table><tr><th>Student</th>${sh(st.date)}<th>Day</th></tr>${rows}</table></div></div>`}
+
+function logItems(list){if(!list.length)return `<p class="sub">No changes recorded yet. Edits you make on the Mark tab appear here.</p>`;
+ return `<ul class="log">${list.map(e=>{const nm=e.sid?((STU.find(u=>u.id===e.sid)||{}).name||e.name||e.sid):"";
+  const pl=e.period==="all"?"all periods":esc(e.sub||"period "+(+e.period+1))+(e.tch?" ("+esc(e.tch)+")":"");
+  const tag=e.scope==="period"?["Period","per"]:e.scope==="tt"?["Timetable","per"]:["College",""];
+  const body=e.scope==="period"?`${esc(nm)}, ${pl}: ${e.from||"–"} → ${e.to}`:e.scope==="tt"?esc(e.note):`Everyone, ${pl} set to ${e.to}${e.note?` (${esc(e.note)})`:""} · ${e.count} changed`;
+  return `<li><span class="tag ${tag[1]}">${tag[0]}</span><div><div>${body}</div><div class="sub">${dlabel(e.date)} · by ${esc(e.by)} · ${when(e.t)}</div></div></li>`}).join("")}</ul>`}
+function logView(mine){
+ let L=db.log.slice().reverse();
+ if(mine)L=L.filter(e=>e.scope==="college"||e.sid===st.user.id);
+ const f=st.filter;
+ if(f==="college")L=L.filter(e=>e.scope==="college");
+ else if(f!=="all")L=L.filter(e=>e.period==="all"||e.sub===f);
+ const chips=[["all","All changes"],["college","College-wide"],...db.subjects.map(z=>[z.name,z.name])];
+ return `<div class="card"><h2>Change log</h2><div class="chips">${chips.map(c=>`<button class="chip" data-f="${esc(c[0])}" aria-pressed="${f===c[0]}">${esc(c[1])}</button>`).join("")}</div>${logItems(L)}</div>`}
+
+function studentView(){
+ const id=st.user.id,days=Object.keys(db.rec).filter(d=>db.rec[d][id]).sort().reverse(),by={};
+ days.forEach(d=>getTT(d).forEach((x,i)=>{(by[x.sub]=by[x.sub]||[]).push(get(d,id)[i])}));
+ const tot=pct(Object.values(by).flat());
+ return `<div class="card"><h2>Overall</h2><div class="stats"><div class="stat"><b>${tot===null?"–":tot+"%"}</b><span class="sub">All subjects</span></div>${db.subjects.map(z=>{const p=pct(by[z.name]||[]);return `<div class="stat"><b>${p===null?"–":p+"%"}</b><span class="sub">${esc(z.name)}</span><div class="bar"><i style="width:${p||0}%"></i></div></div>`}).join("")}</div></div>
+ <div class="card"><h2>By day</h2><p class="sub">P present, A absent, L late (counts as present), C claim under review. Periods and subjects change from day to day.</p><div class="scroll"><table style="min-width:0"><tr><th>Date</th><th style="text-align:left">Periods that day</th></tr>${days.map(d=>{const a=get(d,id);return `<tr><td>${dlabel(d)}</td><td style="text-align:left"><div class="row">${getTT(d).map((x,i)=>`<div style="text-align:center" title="${esc(x.sub+(x.t?" ("+x.t+")":""))}"><span class="m ${a[i]}">${a[i]||"–"}</span><div class="sub sj">${esc(x.sub)}</div></div>`).join("")}</div></td></tr>`}).join("")||`<tr><td colspan="2" class="sub">No attendance recorded yet.</td></tr>`}</table></div></div>`+logView(true)}
+
+function rosterView(){
+ return `<div class="card"><h2>Subjects and teachers</h2><p class="sub">List every teacher who takes a subject, separated by commas. Each day's timetable lets you pick which teacher takes which period.</p>
+ ${db.subjects.map((z,i)=>`<div class="row" style="margin-bottom:8px"><input class="sjn" data-i="${i}" value="${esc(z.name)}" aria-label="Subject name" placeholder="Subject" style="width:170px"><input class="sjt" data-i="${i}" value="${esc(z.teachers.join(", "))}" aria-label="Teachers for ${esc(z.name)}" placeholder="Teachers, comma separated" style="flex:1;min-width:160px"><button class="btn ghost sdel" data-i="${i}">${st.sdel===i?"Confirm remove":"Remove"}</button></div>`).join("")}
+ <button class="btn" id="sadd">Add subject</button></div>
+ <div class="card"><h2>Passwords</h2><div class="row"><select id="pwr" aria-label="Whose password"><option value="rep">Class rep</option><option value="tutor">Class tutor</option></select><input id="npw" type="password" autocomplete="new-password" placeholder="New password" aria-label="New password"><button class="btn" id="spw">Change password</button><span class="sub">${esc(st.pmsg||"")}</span></div></div>
+ <div class="card"><h2>Add students</h2><p class="sub">One per line: "Name" or "Roll, Name". Roll numbers are made up when left out. Paste your whole list at once.</p>
+ <textarea id="bulk" aria-label="Students to add" placeholder="R101, Aarav Nair&#10;Meera Thomas"></textarea><div class="row" style="margin-top:8px"><button class="btn" id="addb">Add students</button><span class="sub">${esc(st.msg)}</span></div></div>
+ <div class="card"><h2>Roster (${STU.length})</h2><div class="scroll"><table><tr><th>Roll</th><th>Name</th><th></th></tr>${STU.map(u=>`<tr><td><input class="rid" data-id="${esc(u.id)}" value="${esc(u.id)}" aria-label="Roll number" style="width:90px"></td><td><input class="rn" data-id="${esc(u.id)}" value="${esc(u.name)}" aria-label="Name for ${esc(u.id)}" style="width:100%"></td><td><button class="btn ghost del" data-id="${esc(u.id)}">${st.del===u.id?"Confirm remove":"Remove"}</button></td></tr>`).join("")}</table></div></div>`}
+function exportView(){const ds=Object.keys(db.rec).sort();return `<div class="card"><h2>Final attendance register</h2><p class="sub">Downloads an Excel file with a Consolidated sheet (each student's percentage in every subject and overall) and one sheet per subject showing each student's mark on every date and period, with the teacher for each.</p>
+ <div class="row" style="margin:12px 0"><label class="sub">From <input type="date" id="xf" value="${ds[0]||""}"></label><label class="sub">To <input type="date" id="xt" value="${ds[ds.length-1]||""}"></label><button class="btn" id="xdl">Download Excel register</button></div><div class="sub" id="xmsg" role="status"></div></div>`}
+function buildXlsx(f,t){
+ const X=window.XLSX,days=Object.keys(db.rec).filter(d=>(!f||d>=f)&&(!t||d<=t)).sort();
+ if(!days.length)return null;
+ const subs=[...new Set([...db.subjects.map(z=>z.name),...days.flatMap(d=>getTT(d).map(x=>x.sub))])],cols={};
+ subs.forEach(n=>cols[n]=[]);days.forEach(d=>getTT(d).forEach((x,i)=>cols[x.sub].push({d,i,t:x.t})));
+ const stat=(id,n)=>{let att=0,held=0,cl=0;cols[n].forEach(c=>{const v=get(c.d,id)[c.i];if(v==="P"||v==="L")att++;if(v==="P"||v==="L"||v==="A")held++;if(v==="C")cl++});return{att,held,cl}};
+ const pc=(a,h)=>h?Math.round(a/h*1000)/10:"";
+ const wb=X.utils.book_new(),used=new Set();
+ const add=(ws,name,w)=>{let nm=name.replace(/[\[\]:*?\/\\]/g,"-").slice(0,31)||"Subject",k=2;while(used.has(nm.toLowerCase()))nm=nm.slice(0,27)+"-"+k++;used.add(nm.toLowerCase());ws["!cols"]=w;X.utils.book_append_sheet(wb,ws,nm)};
+ const rows=STU.map(u=>{let A=0,H=0,C=0;const per=subs.map(n=>{const r=stat(u.id,n);A+=r.att;H+=r.held;C+=r.cl;return pc(r.att,r.held)});return[u.id,u.name,...per,A,H,pc(A,H),C]});
+ add(X.utils.aoa_to_sheet([["Roll no.","Name",...subs.map(n=>n+" (%)"),"Total attended","Total held","Overall (%)","Claims pending"],...rows]),"Consolidated",[{wch:10},{wch:26},...subs.map(()=>({wch:16})),{wch:15},{wch:12},{wch:12},{wch:14}]);
+ subs.forEach(n=>{const cs=cols[n];
+  const r=STU.map(u=>{const st2=stat(u.id,n);return[u.id,u.name,...cs.map(c=>get(c.d,u.id)[c.i]||""),st2.att,st2.held,st2.cl,pc(st2.att,st2.held)]});
+  add(X.utils.aoa_to_sheet([["Roll no.","Name",...cs.map(c=>c.d+" P"+(c.i+1)),"Attended","Held","Claims","Attendance (%)"],["","Teacher",...cs.map(c=>c.t||""),"","","",""],...r]),n,[{wch:10},{wch:26},...cs.map(()=>({wch:15})),{wch:10},{wch:8},{wch:8},{wch:14}])});
+ add(X.utils.aoa_to_sheet([["Attendance register"],["Generated",new Date().toLocaleString()],["Dates covered",days[0]+" to "+days[days.length-1]],["Marks","P present, A absent, L late (counts as attended), C claim under review (not counted until resolved)"],["Attendance (%)","Attended ÷ held, where attended = P + L and held = P + L + A"]]),"Notes",[{wch:16},{wch:90}]);
+ const out=X.write(wb,{type:"array",bookType:"xlsx"});return out instanceof ArrayBuffer?new Uint8Array(out):Uint8Array.from(out)}
+function render(){
+ if(!st.user){app.innerHTML=loginView();fields();
+  document.getElementById("role").onchange=fields;
+  document.getElementById("go").onclick=()=>{const r=document.getElementById("role").value;
+   if(r!=="student"){if(document.getElementById("pw").value!==db.pws[r]){st.err="Wrong password. Try again.";return render()}st.user={role:r,name:r==="tutor"?"Class tutor":"Class rep"}}
+   else{const id=document.getElementById("sid").value;st.user={role:"student",id,name:STU.find(u=>u.id===id).name}}
+   st.err="";st.filter="all";render()};return}
+ let h=head();
+ if(ADM())h+=`<div class="tabs" role="tablist"><button class="tab" role="tab" data-t="mark" aria-selected="${st.tab==="mark"}">Mark attendance</button><button class="tab" role="tab" data-t="log" aria-selected="${st.tab==="log"}">Change log</button>${TUT()?`<button class="tab" role="tab" data-t="roster" aria-selected="${st.tab==="roster"}">Students &amp; subjects</button><button class="tab" role="tab" data-t="export" aria-selected="${st.tab==="export"}">Export register</button>`:""}</div>`+(st.tab==="mark"?markView():st.tab==="roster"&&TUT()?rosterView():st.tab==="export"&&TUT()?exportView():logView(false));
+ else h+=studentView();
+ app.innerHTML=h;
+ document.getElementById("out").onclick=()=>{st.user=null;st.tab="mark";render()};
+ app.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{st.tab=b.dataset.t;st.filter="all";st.msg="";st.del="";st.pmsg="";st.sdel=-1;render()});
+ app.querySelectorAll(".chip").forEach(b=>b.onclick=()=>{st.filter=b.dataset.f;render()});
+ if(ADM()&&st.tab==="mark"){
+  document.getElementById("sq").oninput=e=>{st.q=e.target.value;render();const i=document.getElementById("sq");i.focus();i.setSelectionRange(i.value.length,i.value.length)};
+  document.getElementById("dt").onchange=e=>{if(e.target.value){st.date=e.target.value;st.msg="";render()}};
+  document.getElementById("tn").onchange=e=>{const n=+e.target.value,a=cp(getTT(st.date));while(a.length>n)a.pop();while(a.length<n){const z=db.subjects[a.length%db.subjects.length];a.push({sub:z.name,t:z.teachers[0]||""})}setTT(a,"Timetable set to "+n+" periods")};
+  app.querySelectorAll(".ts").forEach(el=>el.onchange=()=>{const a=cp(getTT(st.date)),i=+el.dataset.i,z=db.subjects[+el.value];a[i]={sub:z.name,t:z.teachers[0]||""};setTT(a,"Period "+(i+1)+" is now "+z.name)});
+  app.querySelectorAll(".tch").forEach(el=>el.onchange=()=>{const a=cp(getTT(st.date)),i=+el.dataset.i;a[i].t=el.value;setTT(a,"Period "+(i+1)+" ("+a[i].sub+") teacher: "+(el.value||"none"))});
+  document.getElementById("tcopy").onclick=()=>{const ds=Object.keys(db.tt).filter(d=>d<st.date).sort();if(!ds.length){st.msg="No earlier timetable saved yet.";return render()}setTT(cp(db.tt[ds[ds.length-1]]),"Timetable copied from "+dlabel(ds[ds.length-1]))};
+  document.getElementById("tshuf").onclick=()=>{const a=cp(getTT(st.date));for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}setTT(a,"Timetable shuffled")};
+  app.querySelectorAll(".m").forEach(b=>b.onclick=()=>{const id=b.dataset.id,p=+b.dataset.p,from=get(st.date,id)[p],to=NEXT[from];if(from==="C"&&!TUT())return;
+   put(st.date,id,p,to);db.log.push({t:Date.now(),by:WHO(),scope:"period",date:st.date,period:p,sub:getTT(st.date)[p].sub,tch:getTT(st.date)[p].t,sid:id,name:(STU.find(u=>u.id===id)||{}).name,from,to});save();render()});
+  if(TUT())document.getElementById("cb").onclick=()=>{const pv=document.getElementById("cp").value,to=document.getElementById("cs").value,note=document.getElementById("cn").value.trim();
+   const ps=pv==="all"?[...Array(getTT(st.date).length).keys()]:[+pv];let c=0;
+   STU.forEach(u=>ps.forEach(p=>{if(get(st.date,u.id)[p]!==to){put(st.date,u.id,p,to);c++}}));
+   db.log.push({t:Date.now(),by:WHO(),scope:"college",date:st.date,period:pv==="all"?"all":+pv,sub:pv==="all"?"":getTT(st.date)[+pv].sub,to,note,count:c});save();
+   st.msg=c+" cell"+(c===1?"":"s")+" changed for "+dlabel(st.date)+".";render()}}
+ if(TUT()&&st.tab==="roster"){
+  app.querySelectorAll(".sjn").forEach(el=>el.onchange=()=>{const z=db.subjects[+el.dataset.i],old=z.name,nn=el.value.trim();if(!nn){el.value=old;return}z.name=nn;Object.values(db.tt).forEach(a=>a.forEach(x=>{if(x.sub===old)x.sub=nn}));db.log.forEach(e=>{if(e.sub===old)e.sub=nn});save()});
+  app.querySelectorAll(".sjt").forEach(el=>el.onchange=()=>{db.subjects[+el.dataset.i].teachers=el.value.split(",").map(t=>t.trim()).filter(Boolean);save()});
+  app.querySelectorAll(".sdel").forEach(b=>b.onclick=()=>{const i=+b.dataset.i;if(db.subjects.length<2){st.msg="Keep at least one subject.";return render()}if(st.sdel===i){db.subjects.splice(i,1);st.sdel=-1;save()}else st.sdel=i;render()});
+  document.getElementById("sadd").onclick=()=>{db.subjects.push({name:"Subject "+(db.subjects.length+1),teachers:[]});save();render()};
+  document.getElementById("spw").onclick=()=>{const v=document.getElementById("npw").value;if(v.length<4){st.pmsg="Use at least 4 characters.";return render()}db.pws[document.getElementById("pwr").value]=v;save();st.pmsg="Password changed.";render()};
+  app.querySelectorAll(".rid").forEach(el=>el.onchange=()=>{const old=el.dataset.id,nid=el.value.trim(),u=STU.find(x=>x.id===old);
+   if(!nid||STU.some(x=>x.id===nid&&x!==u)){st.msg=!nid?"Roll number cannot be empty.":nid+" already belongs to another student.";return render()}
+   u.id=nid;Object.values(db.rec).forEach(r=>{if(r[old]){r[nid]=r[old];delete r[old]}});db.log.forEach(e=>{if(e.sid===old)e.sid=nid});st.msg="Roll number changed to "+nid+". Past attendance moved with it.";save();render()});
+  app.querySelectorAll(".rn").forEach(i=>i.onchange=()=>{const u=STU.find(x=>x.id===i.dataset.id);if(u&&i.value.trim()){u.name=i.value.trim();save()}else if(u)i.value=u.name});
+  app.querySelectorAll(".del").forEach(b=>b.onclick=()=>{if(st.del===b.dataset.id){db.stu=STU=STU.filter(u=>u.id!==b.dataset.id);st.del="";save()}else st.del=b.dataset.id;render()});
+  document.getElementById("addb").onclick=()=>{let n=0,k=0;const seen=new Set(STU.map(u=>u.id));
+   document.getElementById("bulk").value.split("\n").map(l=>l.trim()).filter(Boolean).forEach(l=>{let id="",name=l;const i=l.indexOf(",");if(i>0){id=l.slice(0,i).trim();name=l.slice(i+1).trim()}
+    if(!name)return;if(!id){k=Math.max(k,101);do{id="R"+k++}while(seen.has(id))}if(seen.has(id))return;seen.add(id);STU.push({id,name});n++});
+   db.stu=STU;save();st.msg=n+" student"+(n===1?"":"s")+" added.";render()}}
+ if(TUT()&&st.tab==="export"){
+  const msg=t=>{document.getElementById("xmsg").textContent=t};
+  document.getElementById("xdl").onclick=async()=>{
+   try{
+    if(!window.XLSX){msg("The Excel library did not load. Check your connection and reload.");return}
+    const dl=window.claude&&window.claude.use?await window.claude.use("downloads"):null;
+    if(!dl){msg("Downloads are not available here. Open the published page from claude.ai to export.");return}
+    const f=document.getElementById("xf").value,t=document.getElementById("xt").value,data=buildXlsx(f,t);
+    if(!data){msg("No attendance recorded in that date range.");return}
+    await dl.save({filename:"attendance-register-"+(t||fmt(new Date()))+".xlsx",data});
+    msg("Register ready. Check your downloads.")
+   }catch(e){msg(e&&e.code==="declined"?"Download cancelled.":"Could not save the file: "+((e&&e.message)||"unknown error"))}}}
+}
+render();
+</script>
+</body>
+</html>
